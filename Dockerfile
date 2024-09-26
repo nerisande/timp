@@ -1,7 +1,4 @@
 FROM mhart/alpine-node
-WORKDIR /app
-COPY package*.json ./
-RUN nmp install
-COPY . .
+COPY . /app
+CMD node /app/app.js
 EXPOSE 3000
-CMD ["node", "app.js]
