@@ -1,25 +1,19 @@
-pipeline {
-    agent any
-    stages {
-        stage('Phase1') {
-            steps {
-                echo 'INITIATE PHASE ONE'
-            }
-        }
-        stage('Phase2') {
-            steps {
-                echo 'POWER UP THE BASS CANNON'
-            }
-        }
-        stage('Phase3') {
-            steps {
-                echo 'FIRE'
-            }
-        }
-        stage('Phase4') {
-            steps {
-                echo 'CASUL PWNED'
-            }
+node ('ubuntu'){
+    def app
+    stage('Cloning Git') {
+        checout scm
+    }
+    stage('Build-and-Tag') {
+        app = docker.build("adolfhortler/timp")
+    }
+    stage('Post-to-dockerhub') {
+        docker.withRegistry('https://registry.hub.docker.com", 'dockerhub_creds') {
+            app.push("latest")
         }
     }
+    stage('Pull-image-server') {
+        sh "docker-compose down"
+        sh "docker-compose up -d"
+    }
 }
+    
