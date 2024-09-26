@@ -1,7 +1,7 @@
 node ('ubuntu'){
     def app
     stage('Cloning Git') {
-        checout scm
+        checkout scm
     }
     stage('Build-and-Tag') {
         app = docker.build("adolfhortler/timp")
